@@ -1,0 +1,9 @@
+{
+  "name": "collection",
+  "version": "1.0.0",
+  "description": "A basic collection class",
+  "author": "Esa-Matti Tastula <tastulae@mail.usf.edu>",
+  "dependencies": {
+    "jasmine-node": "1.14.5"
+  }
+}
