@@ -1,8 +1,3 @@
-/*
-In Node.js, the "require" function takes one parameter, the path to a javascript file. It returns
-whatever the value of module.exports is *in that file*
-*/
-
 var Collection = require('../collection'); 
 
 describe('Collection', function() {
