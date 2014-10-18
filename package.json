@@ -1,7 +1,7 @@
 {
-  "name": "collection",
+  "name": "collections",
   "version": "1.0.0",
-  "description": "A basic collection class",
+  "description": "A simple collection that provides capabilities beyond the native javascript array",
   "authors": ["Tommy Sullivan <tom@tommysullivan.me>", "Esa-Matti Tastula <tastulae@mail.usf.edu>"],
   "devDependencies": {
     "jasmine-node": "1.14.5"
