@@ -11,7 +11,7 @@ module.exports = function Collection(internalArray) {
             var independentInternalArray = this.toArray();
             var newIndependentInstance = Collection(independentInternalArray); 
             return newIndependentInstance;
-        }, 
+        },
         get:function(indx){
             if (indx < internalArray.length && indx >= 0 && indx === (indx|0)) return internalArray[indx];
             throw "This subscript " + indx + " is out of range, sweetie!!";
@@ -42,18 +42,9 @@ module.exports = function Collection(internalArray) {
           if (indexToBeReturned==-1) throw 'Error';
           return indexToBeReturned;
         },
-        //firstIndexOf:function(soughtItem){
-        //    for(var j = 0; j < internalArray.length; j++) {
-        //        if (internalArray[j]==soughtItem) return j;
-        //    }
-        //    throw 'Error!';
-        //},
         addCollection: function(collection){
             internalArray=internalArray.concat(collection.toArray());
         },
-        //i wrote this for my sweetie. i think it would've been very challenging and you could've done it. but
-        //i want you to review it and ensure you would be capable to explain how it works with little trouble if I were to ask
-        //instead of deriving it yourself. Notice the clever use of closures. But also pay attention to how it is used.
         forEach: function(functionToCallForEachItem) {
             var arrayOfItemsToLoopOver = this.toArray();
             for (var currentIndex=0; currentIndex<arrayOfItemsToLoopOver.length; currentIndex++){
@@ -99,6 +90,9 @@ module.exports = function Collection(internalArray) {
             });
             return uniqueCollection;
         },
+        equals: function(other) {
+              
+        },
         join: function(delimiter) {
             return internalArray.join(delimiter);
         },
@@ -111,6 +105,12 @@ module.exports = function Collection(internalArray) {
                 fold = operator(fold, item); 
             });
             return fold;
+        },
+        any: function(predicate) {
+            return !this.forEach(function() { return !predicate.apply(null, arguments); });
+        },
+        all: function(predicate) {
+            return this.forEach(predicate);
         }
     }
 }
