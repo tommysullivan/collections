@@ -74,6 +74,11 @@ module.exports = function Collection(internalArray) {
             }
             return !this.forEach(doThisForEachItem);
         },
+        containsAny: function(collectionOfSoughtItems) {
+            return this.any(function(item) {
+                 return collectionOfSoughtItems.contains(item);
+            });
+        },
         length: function() {
             return internalArray.length;
         },

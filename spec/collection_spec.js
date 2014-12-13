@@ -256,6 +256,44 @@ describe('Collection', function() {
             }); 
         });
     });
+    describe('containsAny(collectionOfSoughtItems)', function() {
+        describe('when collectionOfSoughtItems contains one of the items in this collection', function() {
+            it('returns true', function() {
+                 var collectionOfSoughtItems = Collection([9, 10, 11, 3, 14]);
+                 expect(collection.containsAny(collectionOfSoughtItems)).toBeTruthy();
+            }); 
+        });
+        describe('when collectionOfSoughtItems does not contain any of the items in this collection', function() {
+            it('returns true', function() {
+                 var collectionOfSoughtItems = Collection([9, 10, 11, 12, 14]);
+                 expect(collection.containsAny(collectionOfSoughtItems)).toBeFalsy();
+            }); 
+        });
+    });
+    describe('any(p)', function() {
+        describe('where p returns false for all elements', function() {
+            it('returns false', function() {
+                expect(collection.any(function() { return false; })).toBeFalsy();
+            });
+        });
+        describe('where p returns true for one or more elements', function() {
+            it('returns true', function() {
+                expect(collection.any(function(a) { return a==3; })).toBeTruthy();
+            });
+        });
+    });
+    describe('all(p)', function() {
+        describe('where p returns false for one or more elements', function() {
+            it('returns false', function() {
+                expect(collection.all(function(a) { return a!=1; })).toBeFalsy();
+            });
+        });
+        describe('where p returns true for all elements', function() {
+            it('returns true', function() {
+                expect(collection.all(function() { return true; })).toBeTruthy();
+            });
+        });
+    });
     describe('forEach(f)', function() {
         describe('where f is a function f(e, index, collection)', function() {
             var aSpyBasedFunctionToCallForEachElement, returnValue;
