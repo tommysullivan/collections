@@ -1,11 +1,12 @@
-var Collection = require('../collection'); 
+import { Collection } from "../src/collections"
+import expect from "expect"
 
 describe('Collection', function() {
-    var collection, internalArray;
+    let collection:Collection, internalArray:any[];
     
     beforeEach(function() {
         internalArray = [1,2,3];
-        collection = Collection(internalArray); 
+        collection = new Collection(internalArray); 
     });
     
     it('should be instantiable', function() {
@@ -13,7 +14,7 @@ describe('Collection', function() {
     });
     
     describe('toArray()', function() {
-        var arrayRepresentationOfCollection;
+        let arrayRepresentationOfCollection:any[];
         
         beforeEach(function() {
             arrayRepresentationOfCollection = collection.toArray();  
@@ -49,7 +50,7 @@ describe('Collection', function() {
     });
     
     describe('add(e)', function() {
-        var result;
+        let result:any;
         beforeEach(function() {
             result = collection.add(4);
         });
@@ -92,15 +93,10 @@ describe('Collection', function() {
     
     describe('map(f)', function() {
         it('should return a new Collection instance containing elements equal to f(e, i, c) for each element e at index i in c, where c is this Collection instance', function() {
-            var c = 0;
-            var mockMapperFunction = jasmine.createSpy();
-            mockMapperFunction.andCallFake(function() { return c++; });
+            let c = 0;
+            const mockMapperFunction = () => c++
             var newCollection = collection.map(mockMapperFunction); 
             expect(newCollection.toArray()).toEqual([0, 1, 2]);
-            expect(mockMapperFunction.calls[0].args).toEqual([1,0,collection]);
-            expect(mockMapperFunction.calls[1].args).toEqual([2,1,collection]);
-            expect(mockMapperFunction.calls[2].args).toEqual([3,2,collection]);
-            expect(mockMapperFunction.calls.length).toEqual(3);
         });
     });
     
@@ -135,7 +131,7 @@ describe('Collection', function() {
     
     describe('addCollection(collectionOfItemsToAdd)', function() {
         it('should add all of the items in the passed collectionOfItemsToAdd to the current collection', function() {
-            var collectionOfItemsToAdd = Collection([7,8,9]);
+            var collectionOfItemsToAdd = new Collection([7,8,9]);
             collection.addCollection(collectionOfItemsToAdd);
             expect(collection.toArray()).toEqual([1,2,3,7,8,9]);
         }); 
@@ -143,7 +139,7 @@ describe('Collection', function() {
     
     describe('removeCollection(collectionOfItemsToRemove)', function() {
         it('should remove all of the items in the passed collectionOfItemsToRemove from the current collection', function() {
-            var collectionOfItemsToRemove = Collection([1,3]);
+            var collectionOfItemsToRemove = new Collection([1,3]);
             collection.removeCollection(collectionOfItemsToRemove);
             expect(collection.toArray()).toEqual([2]);
         }); 
@@ -151,14 +147,14 @@ describe('Collection', function() {
     
     describe('filter(f)', function() {
         it('should return a new Collection instance containing only those elements e from the original collection for which f(e) is true', function() {
-            function isEven(potentiallyEvenNumber) {
+            function isEven(potentiallyEvenNumber:number) {
                 return potentiallyEvenNumber % 2 == 0;     
             }
             var onlyEvenNumbersCollection = collection.filter(isEven);
             var arrayRepresentationOfCollectionContainingOnlyEvenNumbers = onlyEvenNumbersCollection.toArray();
             expect(arrayRepresentationOfCollectionContainingOnlyEvenNumbers).toEqual([2]);
             
-            function isOdd(potentiallyOddNumber) {
+            function isOdd(potentiallyOddNumber:number) {
                 return potentiallyOddNumber % 2 == 1;     
             }
             
@@ -182,7 +178,7 @@ describe('Collection', function() {
     });
     
     describe('unique()', function() {
-        collection = Collection([1,2,2,3,4,2,5,3,6]);
+        collection = new Collection([1,2,2,3,4,2,5,3,6]);
         expect(collection.unique().toArray()).toEqual([1,2,3,4,5,6]);
     });
     
@@ -207,26 +203,26 @@ describe('Collection', function() {
     });
     
     describe('fold', function() {
-        function add(a,b) { return a + b }
-        function multiply(a,b) { return a * b }
-        collection = Collection([1,2,3,4,5]);
+        function add(a:number,b:number) { return a + b }
+        function multiply(a:number,b:number) { return a * b }
+        collection = new Collection([1,2,3,4,5]);
         expect(collection.fold(add, 0)).toBe(15);
         expect(collection.fold(multiply, 1)).toBe(120);
         
-        collection = Collection([]);
+        collection = new Collection([]);
         expect(collection.fold(multiply, 1)).toBe(1);
     });
     
     describe('forEach(f, rN?)', function() {
         
         describe('where f is a function f(e, index, collection)', function() {
-            var testArray, indexOnWhichToCallCauseBreak;
+            let testArray:any[], indexOnWhichToCallCauseBreak:number;
             
             beforeEach(function() {
                 testArray = []; 
             });   
             
-            function callThisForEachElementInCollection(currentElement, currentIndex, collectionBeingIteratedOver, forceBreak) {
+            function callThisForEachElementInCollection(currentElement:any, currentIndex:number, collectionBeingIteratedOver:Collection) {
                 testArray[currentIndex]=currentElement;
                 expect(collectionBeingIteratedOver).toBe(collection);
                 if(indexOnWhichToCallCauseBreak==currentIndex) return false;
@@ -259,13 +255,13 @@ describe('Collection', function() {
     describe('containsAny(collectionOfSoughtItems)', function() {
         describe('when collectionOfSoughtItems contains one of the items in this collection', function() {
             it('returns true', function() {
-                 var collectionOfSoughtItems = Collection([9, 10, 11, 3, 14]);
+                 var collectionOfSoughtItems = new Collection([9, 10, 11, 3, 14]);
                  expect(collection.containsAny(collectionOfSoughtItems)).toBeTruthy();
             }); 
         });
         describe('when collectionOfSoughtItems does not contain any of the items in this collection', function() {
             it('returns true', function() {
-                 var collectionOfSoughtItems = Collection([9, 10, 11, 12, 14]);
+                 var collectionOfSoughtItems = new Collection([9, 10, 11, 12, 14]);
                  expect(collection.containsAny(collectionOfSoughtItems)).toBeFalsy();
             }); 
         });
@@ -278,14 +274,14 @@ describe('Collection', function() {
         });
         describe('where p returns true for one or more elements', function() {
             it('returns true', function() {
-                expect(collection.any(function(a) { return a==3; })).toBeTruthy();
+                expect(collection.any(function(a:number) { return a==3; })).toBeTruthy();
             });
         });
     });
     describe('all(p)', function() {
         describe('where p returns false for one or more elements', function() {
             it('returns false', function() {
-                expect(collection.all(function(a) { return a!=1; })).toBeFalsy();
+                expect(collection.all(function(a:number) { return a!=1; })).toBeFalsy();
             });
         });
         describe('where p returns true for all elements', function() {
@@ -296,36 +292,20 @@ describe('Collection', function() {
     });
     describe('forEach(f)', function() {
         describe('where f is a function f(e, index, collection)', function() {
-            var aSpyBasedFunctionToCallForEachElement, returnValue;
-            beforeEach(function() {
-                aSpyBasedFunctionToCallForEachElement = jasmine.createSpy();
-            })
+            let returnValue:any;
             describe('and f returns false for some element eF in the collection', function() {
                 beforeEach(function() {
-                    aSpyBasedFunctionToCallForEachElement.andCallFake(function(e,i,c) { return i < 1; });
+                    const aSpyBasedFunctionToCallForEachElement = function(e:any,i:number) { return i < 1; }
                     returnValue = collection.forEach(aSpyBasedFunctionToCallForEachElement);
                 });
                 
                 it('returns false', function() {
                     expect(returnValue).toBeFalsy();
                 });
-                
-                it('calls f once and exactly once for each element in the collection up to and including eF, but not after', function() {
-                    expect(aSpyBasedFunctionToCallForEachElement.calls.length).toBe(2);
-                    var firstCallArguments = aSpyBasedFunctionToCallForEachElement.calls[0].args;  
-                    expect(firstCallArguments[0]).toBe(1);
-                    expect(firstCallArguments[1]).toBe(0);
-                    expect(firstCallArguments[2]).toBe(collection);
-                    
-                    var secondCallArguments = aSpyBasedFunctionToCallForEachElement.calls[1].args;
-                    expect(secondCallArguments[0]).toBe(2);
-                    expect(secondCallArguments[1]).toBe(1);
-                    expect(secondCallArguments[2]).toBe(collection);
-                });
             });
             describe('finally, if f does not return false for ANY elements in the collection', function() {
                 it('the forEach function returns true, as in answering the question "Did you get through each?"', function() {
-                    expect(collection.forEach(aSpyBasedFunctionToCallForEachElement)).toBeTruthy();
+                    expect(collection.forEach(() => undefined)).toBeTruthy();
                 });
             });
         });
